@@ -1,6 +1,6 @@
 import { OrderByFilter } from "@/app/types/filtering";
 
-export const buildSearchParams = <T extends { [key: string]: string }, K>(
+export const buildSearchParams = <T extends { [key: string]: string }>(
   searchParams: T,
 ) => {
   return `?${Object.keys(searchParams)

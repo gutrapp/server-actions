@@ -29,7 +29,7 @@ export default async function Page({
   const stores = await getAllStores(searchParams);
 
   const buildUri = (param: keyof typeof searchParams) => {
-    return buildSearchParams<typeof searchParams, OrderByFilter>({
+    return buildSearchParams<typeof searchParams>({
       ...searchParams,
       [param]: invertCurrentOrdering(searchParams[param]),
     });

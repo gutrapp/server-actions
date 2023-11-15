@@ -1,6 +1,4 @@
-import { OrderByFilter } from "@/app/types/filtering";
-
-export const displayArrows = <T extends { [key: string]: OrderByFilter }>(
+export const displayArrows = <T extends { [key: string]: string }>(
   searchParams: T,
   order: keyof T,
 ) => {
