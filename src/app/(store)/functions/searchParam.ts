@@ -1,5 +1,3 @@
-"use server";
-
 import { OrderByFilter } from "@/app/types/filtering";
 import { redirect } from "next/navigation";
 
@@ -136,6 +134,8 @@ export class SearchParamManager<
    *
    */
   public async redirectWithFilters(currentPath: string, filterParams: T) {
+    "use server";
+
     this.addFilters(filterParams);
 
     redirect(this.buildUrl(currentPath));

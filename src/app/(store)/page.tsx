@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { OrderByFilter } from "../types/filtering";
 import { getAllStores } from "./store/functions/db/queries/getAllStores";
-import {
-  buildSearchParams,
-  invertCurrentOrdering,
-} from "./store/functions/utils/build_search_params";
 import { displayArrows } from "./store/functions/utils/display_arrows";
 import { TableCell } from "./components/TableCell";
+import { HandleQueries } from "./store/functions/utils/handle_queries";
 
 const TABLE_HEAD_FILTERS: {
   label: string;
@@ -28,13 +25,6 @@ export default async function Page({
 }) {
   const stores = await getAllStores(searchParams);
 
-  const buildUri = (param: keyof typeof searchParams) => {
-    return buildSearchParams<typeof searchParams>({
-      ...searchParams,
-      [param]: invertCurrentOrdering(searchParams[param]),
-    });
-  };
-
   return (
     <main className="flex flex-col items-start gap-2 p-20 text-black">
       <div className=" flex items-center gap-5">
@@ -52,8 +42,14 @@ export default async function Page({
               {TABLE_HEAD_FILTERS.map((filter, idx) => (
                 <td key={idx} className="text-center">
                   {filter.label}
-                  <Link className="ml-3" href={buildUri(filter.order)}>
-                    {displayArrows(searchParams, filter.order)}
+                  <Link
+                    className="ml-3"
+                    href={{
+                      pathname: "/",
+                      query: HandleQueries(searchParams, filter.order, "sort"),
+                    }}
+                  >
+                    {displayArrows(searchParams[filter.order])}
                   </Link>
                 </td>
               ))}

@@ -1,10 +1,5 @@
-export const displayArrows = <T extends { [key: string]: string }>(
-  searchParams: T,
-  order: keyof T,
-) => {
-  return searchParams[order]
-    ? searchParams[order] === "asc"
-      ? "↑"
-      : "↓"
-    : "↑↓";
+import { OrderByFilter } from "@/app/types/filtering";
+
+export const displayArrows = (order: OrderByFilter) => {
+  return !order ? "↑↓" : order === "asc" ? "↑" : "↓";
 };
