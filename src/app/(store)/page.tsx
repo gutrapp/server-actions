@@ -36,42 +36,72 @@ export default async function Page({
       </div>
       <Link href="/">Clear filters</Link>
       <div className="mx-20 flex w-full items-center justify-center">
-        <table className="w-full">
-          <thead>
-            <tr>
-              {TABLE_HEAD_FILTERS.map((filter, idx) => (
-                <td key={idx} className="text-center">
-                  {filter.label}
-                  <Link
-                    className="ml-3"
-                    href={{
-                      pathname: "/",
-                      query: HandleQueries(searchParams, filter.order, "sort"),
-                    }}
-                  >
-                    {displayArrows(searchParams[filter.order])}
-                  </Link>
-                </td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {stores.map((store, idx) => (
-              <tr key={idx}>
-                <TableCell url={`/store/${store.id}`} value={store.name} />
-                <TableCell
-                  url={`/store/${store.id}`}
-                  value={store._count.products}
-                />
-                <TableCell
-                  url={`/store/${store.id}`}
-                  value={store._count.orders}
-                />
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table searchParams={searchParams} stores={stores} />
       </div>
     </main>
   );
 }
+
+const Table = ({
+  searchParams,
+  stores,
+}: {
+  stores: ({
+    _count: {
+      products: number;
+      orders: number;
+    };
+  } & {
+    id: number;
+    name: string;
+  })[];
+  searchParams: {
+    name: OrderByFilter;
+    products: OrderByFilter;
+    orders: OrderByFilter;
+  };
+}) => {
+  async function applyFilters(formData: FormData) {
+    "use server";
+  }
+
+  return (
+    <form action={applyFilters}>
+      <table className="w-full">
+        <thead>
+          <tr>
+            {TABLE_HEAD_FILTERS.map((filter, idx) => (
+              <td key={idx} className="text-center">
+                {filter.label}
+                <Link
+                  className="ml-3"
+                  href={{
+                    pathname: "/",
+                    query: HandleQueries(searchParams, [filter.order], "sort"),
+                  }}
+                >
+                  {displayArrows(searchParams[filter.order])}
+                </Link>
+              </td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {stores.map((store, idx) => (
+            <tr key={idx}>
+              <TableCell url={`/store/${store.id}`} value={store.name} />
+              <TableCell
+                url={`/store/${store.id}`}
+                value={store._count.products}
+              />
+              <TableCell
+                url={`/store/${store.id}`}
+                value={store._count.orders}
+              />
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </form>
+  );
+};

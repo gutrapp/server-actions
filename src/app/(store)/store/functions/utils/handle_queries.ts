@@ -6,16 +6,20 @@ type SearchParam = { [x: string]: OrderByFilter | string };
 
 export const HandleQueries = <T extends SearchParam>(
   searchParams: T,
-  filter: keyof T,
+  filters: (keyof T)[],
   typeOfFilter: FilterType = "filter",
 ) => {
-  return {
-    ...searchParams,
-    [filter]:
-      typeOfFilter === "filter"
-        ? searchParams[filter]
-        : searchParams[filter] === "asc"
-          ? "desc"
-          : "asc",
-  };
+  filters.map((filter) => {
+    searchParams = {
+      ...searchParams,
+      [filter]:
+        typeOfFilter === "filter"
+          ? searchParams[filter]
+          : searchParams[filter] === "asc"
+            ? "desc"
+            : "asc",
+    };
+  });
+
+  return searchParams;
 };
